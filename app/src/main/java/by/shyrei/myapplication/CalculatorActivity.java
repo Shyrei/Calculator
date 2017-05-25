@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import java.math.BigDecimal;
 
+import static android.R.attr.orientation;
+
 public class CalculatorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent;
+    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, polska;
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
     EditText display, symbolDisplay;
     private BigDecimal valueOne, valueTwo;
@@ -36,6 +38,11 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
             registerSimpleComponents();
             registerEngeneeringComponents();
         }
+    }
+
+    public void polska() {
+        setContentView(R.layout.activity_main_polska);
+        registerPolskaComponents();
     }
 
     public void registerSimpleComponents() {
@@ -75,6 +82,8 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
         plus.setOnClickListener(this);
         minus = (Button) findViewById(R.id.btnMinus);
         minus.setOnClickListener(this);
+        polska = (Button) findViewById(R.id.btnPolska);
+        polska.setOnClickListener(this);
     }
 
     void registerEngeneeringComponents() {
@@ -85,9 +94,25 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
         exponent = (Button) findViewById(R.id.btnExponent);
         exponent.setOnClickListener(this);
     }
+
+    void registerPolskaComponents() {
+        left = (Button) findViewById(R.id.btnLeft);
+        left.setOnClickListener(this);
+        right = (Button) findViewById(R.id.btnRight);
+        right.setOnClickListener(this);
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btnPolska:
+                polska();
+                break;
+            case R.id.btnLeft:
+                display.append("(");
+                break;
+            case R.id.btnRight:
+                display.append(")");
+                break;
             case R.id.btn1:
                 display.append("1");
                 break;
