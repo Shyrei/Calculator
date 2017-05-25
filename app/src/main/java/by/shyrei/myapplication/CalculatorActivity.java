@@ -4,429 +4,164 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.DigitsKeyListener;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import java.math.BigDecimal;
 
-public class CalculatorActivity extends AppCompatActivity {
+public class CalculatorActivity extends AppCompatActivity implements View.OnClickListener {
 
+    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent;
+    Button one, two, three, four, five, six, seven, eight, nine, zero, point;
     EditText display, symbolDisplay;
-
-    TextView allClear, equals, divide, multiply, minus, plus, square, percent, exponent;
-    TextView one, two, three, four, five, six, seven, eight, nine, zero, point;
-    BigDecimal valueOne;
-    BigDecimal valueTwo;
-    boolean bPlus, bMinus, bMultiply, bDivide, bPercent, bExponent;
-
-   //PortaitActivity portaitCalculator = new PortaitActivity();
-   //LandscapeActivity landscapeCalculator = new LandscapeActivity();
+    private BigDecimal valueOne, valueTwo;
+    private boolean bPlus, bMinus, bMultiply, bDivide, bPercent, bExponent;
+    Calculate calc = new Calculate();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        portait();
-        registerListeners();
-    }
-
-    public void portait() {
         setContentView(R.layout.activity_main);
+        registerSimpleComponents();
 
-        display = (EditText) findViewById(R.id.editText1);
-        symbolDisplay = (EditText) findViewById(R.id.editText2);
-        allClear = (TextView) findViewById(R.id.btnClear);
-        equals = (TextView) findViewById(R.id.btnResult);
-
-        one = (TextView) findViewById(R.id.btn1);
-        two = (TextView) findViewById(R.id.btn2);
-
-        three = (TextView) findViewById(R.id.btn3);
-        four = (TextView) findViewById(R.id.btn4);
-        five = (TextView) findViewById(R.id.btn5);
-        six =(TextView) findViewById(R.id.btn6);
-        seven = (TextView) findViewById(R.id.btn7);
-        eight = (TextView) findViewById(R.id.btn8);
-        nine = (TextView) findViewById(R.id.btn9);
-        zero = (TextView) findViewById(R.id.btn0);
-
-        point = (TextView) findViewById(R.id.btnPoint);
-        divide =(TextView) findViewById(R.id.btnDevide);
-        multiply = (TextView) findViewById(R.id.btnMultiply);
-        plus = (TextView) findViewById(R.id.btnPlus);
-        minus = (TextView) findViewById(R.id.btnMinus);
-
-        display.setKeyListener(DigitsKeyListener.getInstance(true,true));
-        registerListeners();
     }
-
-    public void landscape(){
-        setContentView(R.layout.activity_main_landscape);
-
-        display = (EditText) findViewById(R.id.editText1);
-        symbolDisplay = (EditText) findViewById(R.id.editText2);
-        allClear = (TextView) findViewById(R.id.btnClear);
-        equals = (TextView) findViewById(R.id.btnResult);
-
-        one = (TextView) findViewById(R.id.btn1);
-        two = (TextView) findViewById(R.id.btn2);
-        three = (TextView) findViewById(R.id.btn3);
-        four = (TextView) findViewById(R.id.btn4);
-        five = (TextView) findViewById(R.id.btn5);
-        six =(TextView) findViewById(R.id.btn6);
-        seven = (TextView) findViewById(R.id.btn7);
-        eight = (TextView) findViewById(R.id.btn8);
-        nine = (TextView) findViewById(R.id.btn9);
-        zero = (TextView) findViewById(R.id.btn0);
-
-        point = (TextView) findViewById(R.id.btnPoint);
-        divide =(TextView) findViewById(R.id.btnDevide);
-        multiply = (TextView) findViewById(R.id.btnMultiply);
-        plus = (TextView) findViewById(R.id.btnPlus);
-        minus = (TextView) findViewById(R.id.btnMinus);
-        square = (TextView) findViewById(R.id.btnSquare);
-        percent = (TextView) findViewById(R.id.btnPercent);
-        exponent = (TextView) findViewById(R.id.btnExponent);
-
-        display.setKeyListener(DigitsKeyListener.getInstance(true,true));
-        registerListenersLandscape();
-    }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            portait();
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_main);
+            registerSimpleComponents();
+        } else {
+            setContentView(R.layout.activity_main_landscape);
+            registerSimpleComponents();
+            registerEngeneeringComponents();
         }
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            landscape();
-        }
-
     }
 
-    public void registerListeners () {
+    public void registerSimpleComponents() {
+        display = (EditText) findViewById(R.id.editText1);
+        symbolDisplay = (EditText) findViewById(R.id.editText2);
+        allClear = (Button) findViewById(R.id.btnClear);
+        allClear.setOnClickListener(this);
+        equals = (Button) findViewById(R.id.btnResult);
+        equals.setOnClickListener(this);
+        one = (Button) findViewById(R.id.btn1);
+        one.setOnClickListener(this);
+        two = (Button) findViewById(R.id.btn2);
+        two.setOnClickListener(this);
+        three = (Button) findViewById(R.id.btn3);
+        three.setOnClickListener(this);
+        four = (Button) findViewById(R.id.btn4);
+        four.setOnClickListener(this);
+        five = (Button) findViewById(R.id.btn5);
+        five.setOnClickListener(this);
+        six = (Button) findViewById(R.id.btn6);
+        six.setOnClickListener(this);
+        seven = (Button) findViewById(R.id.btn7);
+        seven.setOnClickListener(this);
+        eight = (Button) findViewById(R.id.btn8);
+        eight.setOnClickListener(this);
+        nine = (Button) findViewById(R.id.btn9);
+        nine.setOnClickListener(this);
+        zero = (Button) findViewById(R.id.btn0);
+        zero.setOnClickListener(this);
+        point = (Button) findViewById(R.id.btnPoint);
+        point.setOnClickListener(this);
+        divide = (Button) findViewById(R.id.btnDevide);
+        divide.setOnClickListener(this);
+        multiply = (Button) findViewById(R.id.btnMultiply);
+        multiply.setOnClickListener(this);
+        plus = (Button) findViewById(R.id.btnPlus);
+        plus.setOnClickListener(this);
+        minus = (Button) findViewById(R.id.btnMinus);
+        minus.setOnClickListener(this);
+    }
 
-        one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    void registerEngeneeringComponents() {
+        square = (Button) findViewById(R.id.btnSquare);
+        square.setOnClickListener(this);
+        percent = (Button) findViewById(R.id.btnPercent);
+        percent.setOnClickListener(this);
+        exponent = (Button) findViewById(R.id.btnExponent);
+        exponent.setOnClickListener(this);
+    }
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn1:
                 display.append("1");
-            }
-        });
-
-        two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn2:
                 display.append("2");
-            }
-        });
-
-        three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn3:
                 display.append("3");
-            }
-        });
-
-        four.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn4:
                 display.append("4");
-            }
-        });
-
-        five.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn5:
                 display.append("5");
-            }
-        });
-
-        six.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn6:
                 display.append("6");
-            }
-        });
-
-        seven.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn7:
                 display.append("7");
-            }
-        });
-
-        eight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn8:
                 display.append("8");
-            }
-        });
-
-        nine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn9:
                 display.append("9");
-            }
-        });
-
-        zero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btn0:
                 display.append("0");
-            }
-        });
-
-        point.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnPoint:
                 display.append(".");
-            }
-        });
-
-        divide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bDivide = true;
-                    display.setText("");
-                    symbolDisplay.append("/");
-                }
-            }
-        });
-
-        multiply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bMultiply = true;
-                    display.setText("");
-                    symbolDisplay.setText("*");
-                }
-            }
-        });
-
-        plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bPlus = true;
-                    display.setText("");
-                    symbolDisplay.setText("+");
-                }
-            }
-        });
-
-        minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bMinus = true;
-                    display.setText("");
-                    symbolDisplay.setText("-");
-                }
-            }
-        });
-
-
-        equals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                break;
+            case R.id.btnPlus:
                 if (TextUtils.isEmpty(display.getText())) {
                     display.setText("");
                 } else {
-                    valueTwo = new BigDecimal(display.getText().toString());
-                }
-
-                if (bPlus == true){
-                    display.setText(valueOne.add(valueTwo).toString());
-                    bPlus=false;
-                    symbolDisplay.setText("");
-                }
-
-                if (bMinus == true){
-                    display.setText(valueOne.subtract(valueTwo).toString());
-                    bMinus = false;
-                    symbolDisplay.setText("");
-                }
-
-                if (bMultiply == true){
-                    display.setText(valueOne.multiply(valueTwo).toString());
-                    bMultiply=false;
-                    symbolDisplay.setText("");
-                }
-
-                if (bDivide == true){
-                    display.setText(valueOne.divide(valueTwo, 5, BigDecimal.ROUND_HALF_UP).toString());
-                    bDivide=false;
-                    symbolDisplay.setText("");
-                }
-
-            }
-        });
-
-
-        allClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.setText("");
-                symbolDisplay.setText("");
-            }
-        });
-    }
-
-    public void registerListenersLandscape () {
-
-        one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("1");
-            }
-        });
-
-        two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("2");
-            }
-        });
-
-        three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("3");
-            }
-        });
-
-        four.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("4");
-            }
-        });
-
-        five.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("5");
-            }
-        });
-
-        six.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("6");
-            }
-        });
-
-        seven.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("7");
-            }
-        });
-
-        eight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("8");
-            }
-        });
-
-        nine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("9");
-            }
-        });
-
-        zero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append("0");
-            }
-        });
-
-        point.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                display.append(".");
-            }
-        });
-
-        divide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bDivide = true;
-                    display.setText("");
-                    symbolDisplay.append("/");
-                }
-            }
-        });
-
-        multiply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bMultiply = true;
-                    display.setText("");
-                    symbolDisplay.setText("*");
-                }
-            }
-        });
-
-        plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
-                    display.setText("");
-                }else {
                     valueOne = new BigDecimal(display.getText().toString());
                     bPlus = true;
                     display.setText("");
                     symbolDisplay.setText("+");
                 }
-            }
-        });
-
-        minus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(display.getText())){
+                break;
+            case R.id.btnMinus:
+                if (TextUtils.isEmpty(display.getText())) {
                     display.setText("");
-                }else {
+                } else {
                     valueOne = new BigDecimal(display.getText().toString());
                     bMinus = true;
                     display.setText("");
                     symbolDisplay.setText("-");
                 }
-            }
-        });
-
-        square.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnDevide:
+                if (TextUtils.isEmpty(display.getText())) {
+                    display.setText("");
+                } else {
+                    valueOne = new BigDecimal(display.getText().toString());
+                    bDivide = true;
+                    display.setText("");
+                    symbolDisplay.append("/");
+                }
+                break;
+            case R.id.btnMultiply:
+                if (TextUtils.isEmpty(display.getText())) {
+                    display.setText("");
+                } else {
+                    valueOne = new BigDecimal(display.getText().toString());
+                    bMultiply = true;
+                    display.setText("");
+                    symbolDisplay.setText("*");
+                }
+                break;
+            case R.id.btnSquare:
                 if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
@@ -434,25 +169,16 @@ public class CalculatorActivity extends AppCompatActivity {
                     display.setText(valueOne.multiply(valueOne).toString());
                     symbolDisplay.setText("^2");
                 }
-            }
-        });
-
-        percent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnPercent:
                 if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
                     bPercent = true;
-                    //display.setText(valueOne.multiply(valueOne).toString());
                     symbolDisplay.setText("%");
                 }
-            }
-        });
-
-        exponent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnExponent:
                 if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
@@ -461,72 +187,51 @@ public class CalculatorActivity extends AppCompatActivity {
                     display.setText("");
                     symbolDisplay.setText("^");
                 }
-            }
-        });
-
-        equals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                break;
+            case R.id.btnResult:
                 if (TextUtils.isEmpty(display.getText())) {
                     display.setText("");
                 } else {
                     valueTwo = new BigDecimal(display.getText().toString());
                 }
-
-                if (bPercent == true){
+                if (bPercent){
                     BigDecimal test = new BigDecimal(100);
                     BigDecimal value = new BigDecimal(0);
                     value = valueOne.divide(test, 3, BigDecimal.ROUND_HALF_UP);
                     valueTwo = valueTwo.multiply(value);
                     bPercent=false;
                 }
-
-                if (bPlus == true){
-                    display.setText(valueOne.add(valueTwo).toString());
+                if (bPlus){
+                    display.setText(calc.plus(valueOne,valueTwo).toString());
                     bPlus=false;
                     symbolDisplay.setText("");
                 }
-
-                if (bMinus == true){
-                    display.setText(valueOne.subtract(valueTwo).toString());
+                if (bMinus){
+                    display.setText(calc.minus(valueOne,valueTwo).toString());
                     bMinus = false;
                     symbolDisplay.setText("");
                 }
-
-                if (bMultiply == true){
-                    display.setText(valueOne.multiply(valueTwo).toString());
+                if (bMultiply){
+                    display.setText(calc.multiply(valueOne,valueTwo).toString());
                     bMultiply=false;
                     symbolDisplay.setText("");
                 }
-
-                if (bDivide == true){
-                    display.setText(valueOne.divide(valueTwo, 5, BigDecimal.ROUND_HALF_UP).toString());
+                if (bDivide){
+                    display.setText(calc.devide(valueOne,valueTwo).toString());
                     bDivide=false;
                     symbolDisplay.setText("");
                 }
-
-                if (bExponent == true){
-                    BigDecimal value = new BigDecimal(1);
-                    for (int i=0; i < valueTwo.intValue(); i++)
-                        value=value.multiply(valueOne);
-                    display.setText(value.toString());
+                if (bExponent){
+                    display.setText(calc.exponent(valueOne,valueTwo).toString());
                     bExponent=false;
                     symbolDisplay.setText("");
                 }
-
-            }
-        });
-
-        allClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.btnClear:
                 display.setText("");
                 symbolDisplay.setText("");
-            }
-        });
+                break;
+        }
     }
-
-
-
 }
+
