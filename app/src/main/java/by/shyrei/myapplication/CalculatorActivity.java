@@ -9,30 +9,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import java.math.BigDecimal;
 
-import static android.R.attr.orientation;
+import static by.shyrei.myapplication.ExpressionUtils.*;
 
 public class CalculatorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right, polska;
+    Button allClear, equals, divide, multiply, minus, plus, square, percent, exponent, left, right;
     Button one, two, three, four, five, six, seven, eight, nine, zero, point;
     EditText display, symbolDisplay;
-    private BigDecimal valueOne, valueTwo;
-    private boolean bPlus, bMinus, bMultiply, bDivide, bPercent, bExponent;
-    Calculate calc = new Calculate();
+    String line;
+
+    //private boolean bPlus, bMinus, bMultiply, bDivide, bPercent, bExponent;
+    //Calculate calc = new Calculate();
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_polska);
         registerSimpleComponents();
-
+        registerPolskaComponents();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main_polska);
             registerSimpleComponents();
+            registerPolskaComponents();
         } else {
             setContentView(R.layout.activity_main_landscape);
             registerSimpleComponents();
@@ -42,6 +45,7 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
 
     public void polska() {
         setContentView(R.layout.activity_main_polska);
+        registerSimpleComponents();
         registerPolskaComponents();
     }
 
@@ -82,8 +86,6 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
         plus.setOnClickListener(this);
         minus = (Button) findViewById(R.id.btnMinus);
         minus.setOnClickListener(this);
-        polska = (Button) findViewById(R.id.btnPolska);
-        polska.setOnClickListener(this);
     }
 
     void registerEngeneeringComponents() {
@@ -104,9 +106,6 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnPolska:
-                polska();
-                break;
             case R.id.btnLeft:
                 display.append("(");
                 break;
@@ -147,64 +146,36 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
                 display.append(".");
                 break;
             case R.id.btnPlus:
-                if (TextUtils.isEmpty(display.getText())) {
-                    display.setText("");
-                } else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bPlus = true;
-                    display.setText("");
-                    symbolDisplay.setText("+");
-                }
+                display.append("+");
                 break;
             case R.id.btnMinus:
-                if (TextUtils.isEmpty(display.getText())) {
-                    display.setText("");
-                } else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bMinus = true;
-                    display.setText("");
-                    symbolDisplay.setText("-");
-                }
+                display.append("-");
                 break;
             case R.id.btnDevide:
-                if (TextUtils.isEmpty(display.getText())) {
-                    display.setText("");
-                } else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bDivide = true;
-                    display.setText("");
-                    symbolDisplay.append("/");
-                }
+                display.append("/");
                 break;
             case R.id.btnMultiply:
-                if (TextUtils.isEmpty(display.getText())) {
-                    display.setText("");
-                } else {
-                    valueOne = new BigDecimal(display.getText().toString());
-                    bMultiply = true;
-                    display.setText("");
-                    symbolDisplay.setText("*");
-                }
+                display.append("*");
                 break;
             case R.id.btnSquare:
-                if (TextUtils.isEmpty(display.getText())){
+                /*if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
                     valueOne = new BigDecimal(display.getText().toString());
                     display.setText(valueOne.multiply(valueOne).toString());
                     symbolDisplay.setText("^2");
-                }
+                }*/
                 break;
             case R.id.btnPercent:
-                if (TextUtils.isEmpty(display.getText())){
+                /*if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
                     bPercent = true;
                     symbolDisplay.setText("%");
-                }
+                }*/
                 break;
             case R.id.btnExponent:
-                if (TextUtils.isEmpty(display.getText())){
+               /* if (TextUtils.isEmpty(display.getText())){
                     display.setText("");
                 }else {
                     valueOne = new BigDecimal(display.getText().toString());
@@ -212,9 +183,12 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
                     display.setText("");
                     symbolDisplay.setText("^");
                 }
-                break;
+                break;*/
             case R.id.btnResult:
-                if (TextUtils.isEmpty(display.getText())) {
+                line = display.getText().toString();
+                display.setText(calculateExpression(line).toPlainString());
+                //ExpressionUtils utils = new ExpressionUtils();
+                /*if (TextUtils.isEmpty(display.getText())) {
                     display.setText("");
                 } else {
                     valueTwo = new BigDecimal(display.getText().toString());
@@ -250,7 +224,7 @@ public class CalculatorActivity extends AppCompatActivity implements View.OnClic
                     display.setText(calc.exponent(valueOne,valueTwo).toString());
                     bExponent=false;
                     symbolDisplay.setText("");
-                }
+                }*/
                 break;
             case R.id.btnClear:
                 display.setText("");
